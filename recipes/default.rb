@@ -25,7 +25,7 @@ package packages
 packages = %w(proxmox-ve-2.6.32 ntp ssh lvm2 postfix ksm-control-daemon vzprocps open-iscsi bootlogd)
 package packages
 
-packages = %w(linux-image-amd64 linux-image-3.2.0-4-amd64 linux-base)
+packages = %w(linux-image-amd64 linux-image-3.2.0-4-amd64 linux-base linux-headers-3.2.0-4-amd64 linux-headers-3.2.0-4-common)
 package packages do
   action :remove
   only_if 'echo "linux-image-3.2.0-4-amd64 linux-image-3.2.0-4-amd64/prerm/removing-running-kernel-3.2.0-4-amd64 boolean false" | debconf-set-selections'
