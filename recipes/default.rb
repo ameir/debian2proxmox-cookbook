@@ -11,7 +11,7 @@ include_recipe 'apt'
 apt_repository "proxmox" do
   uri "http://download.proxmox.com/debian"
   distribution node['lsb']['codename']
-  components ["pve"]
+  components ["pve-no-subscription"]
   key "http://download.proxmox.com/debian/key.asc"
 end
 
@@ -19,7 +19,7 @@ template '/etc/hosts' do
   source 'hosts.erb'
 end
 
-packages = %w(pve-firmware pve-kernel-2.6.32-26-pve)
+packages = %w(pve-firmware pve-kernel-2.6.32-39-pve)
 package packages
 
 packages = %w(proxmox-ve-2.6.32 ntp ssh lvm2 postfix ksm-control-daemon vzprocps open-iscsi bootlogd)
