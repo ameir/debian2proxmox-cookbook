@@ -19,16 +19,25 @@ template '/etc/hosts' do
   source 'hosts.erb'
 end
 
-packages = %w(pve-firmware pve-kernel-2.6.32-39-pve)
-package packages
+package 'install prerequisites' do
+  package_name %w(ntp ssh lvm2 postfix ksm-control-daemon open-iscsi)
+  action :install
+end
 
-packages = %w(proxmox-ve-2.6.32 ntp ssh lvm2 postfix ksm-control-daemon vzprocps open-iscsi bootlogd)
-package packages
+case node['lsb']['codename']
+when 'jessie'
+  package %w(proxmox-ve)
+when 'wheezy'
+  package %w(pve-firmware pve-kernel-2.6.32-39-pve)
+  package %w(proxmox-ve-2.6.32 vzprocps bootlogd)
+end
 
-packages = %w(linux-image-amd64 linux-image-3.2.0-4-amd64 linux-base linux-headers-3.2.0-4-amd64 linux-headers-3.2.0-4-common)
+kernel_package = "linux-image-#{node['kernel']['release']}"
+packages = %W(linux-image-amd64 linux-base #{kernel_package})
 package packages do
   action :remove
-  only_if 'echo "linux-image-3.2.0-4-amd64 linux-image-3.2.0-4-amd64/prerm/removing-running-kernel-3.2.0-4-amd64 boolean false" | debconf-set-selections'
+  only_if "echo '#{kernel_package} #{kernel_package}/prerm/removing-running-kernel-#{node['kernel']['release']} boolean false' | debconf-set-selections"
+  only_if {kernel_package =~ /3\.(2|16)/}
   notifies :run, 'execute[update-grub]', :immediately
 end
 
