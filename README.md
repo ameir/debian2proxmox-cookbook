@@ -9,10 +9,15 @@ fresh.  I won't be responsible for lost data.
 
 debian
 
+## Prerequisites
+You must have Debian 7 or 8 installed.  Additionally, the following packages must
+be installed:
+`apt-get -y install lsb-release curl sudo rsync`
+
 ## Usage
-You can install this a variety of ways.  One of the easiest is with chef-runner,
-which will package up the cookbook and its dependencies, rsync them to the target
-host, and run chef-solo.
+You can install this a variety of ways.  One of the easiest is with
+[chef-runner](https://github.com/mlafeldt/chef-runner), which will package up the
+cookbook and its dependencies, rsync them to the target host, and run chef-solo.
 
 `chef-runner -i true --sudo=false -H root@host`
 
